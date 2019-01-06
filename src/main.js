@@ -1,5 +1,10 @@
+import createCaptchaElement from "./captcha-element.js";
+
 function main() {
-  alert("Hello");
+  const captchas = document.getElementsByClassName("i-captcha");
+  for (const elem of captchas) {
+    createCaptchaElement(elem);
+  }
 }
 
 // Taken from https://developer.mozilla.org/en-US/docs/Web/Events/DOMContentLoaded#Checking_whether_loading_is_already_complete.
