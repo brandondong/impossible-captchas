@@ -7,9 +7,10 @@ export default function createCaptchaElement(elem) {
   fixedSizeDiv.style.height = `${height}px`;
   
   const iframe = document.createElement("iframe");
-  iframe.src = "https://github.com/";
+  iframe.src = "robot/index.html";
   iframe.width = width;
   iframe.height = height;
+  iframe.style.border = "none";
   
   fixedSizeDiv.appendChild(iframe);
   elem.appendChild(fixedSizeDiv);
