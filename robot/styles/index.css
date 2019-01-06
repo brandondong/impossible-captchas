@@ -1,6 +1,7 @@
 body {
   background-color: white;
-  font-family: helvetica,arial,sans-serif;
+  /* Match the Bootstrap font. */
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
   margin: 0px;
 }
 
@@ -33,6 +34,61 @@ span.checkbox-border {
   cursor: pointer;
   margin-left: 24px;
   margin-right: 18px;
+}
+
+@keyframes success {
+  /* Each 12.5% is 1 second and should result in 1 rotation. */
+  0% {
+    transform: rotate(0deg);
+  }
+  6.25% {
+    border-top-color: transparent;
+  }
+  87.5% {
+    border-top-color: transparent;
+  }
+  100% {
+    transform: rotate(2880deg);
+  }
+}
+
+@keyframes failure {
+  /*
+    Each 12.5% is 1 second and should result in 1 rotation.
+    Perform 5 rotations followed by 2 seconds of solid red and then transition back to blue.
+  */
+  0% {
+    transform: rotate(0deg);
+  }
+  6.25% {
+    border-top-color: transparent;
+  }
+  50% {
+    border-color: rgb(86, 165, 251);
+    border-top-color: transparent;
+  }
+  62.5% {
+    transform: rotate(1800deg);
+    border-color: #ff727d;
+  }
+  87.5% {
+    border-color: #ff727d;
+  }
+  100% {
+    transform: rotate(1800deg);
+  }
+}
+
+span.checkbox-border.success {
+  animation-name: success;
+  animation-duration: 8s;
+  animation-timing-function: linear;
+}
+
+span.checkbox-border.failure {
+  animation-name: failure;
+  animation-duration: 8s;
+  animation-timing-function: linear;
 }
 
 .no-select {
