@@ -1,0 +1,26 @@
+body {
+  background-color: white;
+  /* Match the Bootstrap font. */
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+  width: 500px;
+  height: 600px;
+  margin: 0;
+}
+
+div.container {
+  padding: 8px;
+}
+
+div.prompt {
+  background-color: rgb(86, 165, 251);
+  color: white;
+  padding: 18px;
+}
+
+p {
+  margin: 0;
+}
+
+h1 {
+  margin: 0;
+}
