@@ -1,6 +1,6 @@
 export default class Modal {
   constructor() {
-    const width = "500";
+    const width = "428";
     const height = "600";
     
     const md = document.createElement("div");

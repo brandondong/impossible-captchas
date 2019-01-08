@@ -2,7 +2,7 @@ body {
   background-color: white;
   /* Match the Bootstrap font. */
   font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
-  width: 500px;
+  width: 428px;
   height: 600px;
   margin: 0;
 }
@@ -17,10 +17,77 @@ div.prompt {
   padding: 18px;
 }
 
+div.images {
+  margin-top: 10px;
+}
+
+div.footer {
+  padding: 18px;
+}
+
 p {
   margin: 0;
 }
 
 h1 {
   margin: 0;
+}
+
+u {
+  cursor: pointer;
+}
+
+img {
+  width: 100px;
+  height: 100px;
+  display: block;
+}
+
+table {
+  border-spacing: 0;
+  margin: -2px;
+}
+
+td {
+  padding: 2px;
+}
+
+button {
+  /* Match Bootstrap buttons look. */
+  cursor: pointer;
+  color: #fff;
+  background-color: #343a40;
+  border-color: #343a40;
+  border: 1px solid transparent;
+  padding: .375rem .75rem;
+  border-radius: .25rem;
+  font-family: inherit;
+  font-size: 1rem;
+  line-height: 1.5;
+  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+  float: right!important;
+}
+
+button:hover {
+  background-color: #23272b;
+  border-color: #1d2124;
+}
+
+button:focus {
+  box-shadow: 0 0 0 0.2rem rgba(52,58,64,.5);
+}
+
+button:disabled {
+  background-color: #343a40;
+  border-color: #343a40;
+  opacity: .65;
+  cursor: default;
+}
+
+.no-select {
+  /* Taken from https://css-tricks.com/almanac/properties/u/user-select/. */
+  -webkit-user-select: none;  /* Chrome all / Safari all */
+  -moz-user-select: none;     /* Firefox all */
+  -ms-user-select: none;      /* IE 10+ */
+  user-select: none;          /* Likely future */
 }
