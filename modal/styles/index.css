@@ -35,6 +35,7 @@ h1 {
 
 u {
   cursor: pointer;
+  visibility: hidden;
 }
 
 img {
@@ -98,6 +99,7 @@ span.selected {
   top: 6px;
   width: 21px;
   background-color: #66bb6a;
+  visibility: hidden;
 }
 
 span.selected:after {
