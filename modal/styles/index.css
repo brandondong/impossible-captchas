@@ -25,6 +25,12 @@ div.footer {
   padding: 18px;
 }
 
+div.audio {
+  width: 412px;
+  height: 422px;
+  display: none;
+}
+
 p {
   margin: 0;
 }
@@ -52,6 +58,15 @@ table {
 td {
   padding: 2px;
   position: relative;
+}
+
+[contenteditable='true'] {
+  border: 1px solid darkgray;
+  box-shadow: 1px 1px 1px 0 lightgrey inset;
+}
+
+[contenteditable='true']:before {
+  content: "\feff ";
 }
 
 div.image-container {
