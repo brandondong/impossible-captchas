@@ -15,11 +15,7 @@ function main() {
   submitButton.addEventListener("click", () => {
     // Clear image selections.
     numImagesSelected = 0;
-    for (const ic of imageContainers) {
-      const img = ic.children[0];
-      const circle = ic.children[1];
-      _deselect(img, circle);
-    }
+    _deselect_images(imageContainers);
     // Clear the input field.
     audioTextInput.innerHTML = "";
     // Disable the button.
@@ -32,6 +28,12 @@ function main() {
   });
   toggleLink.addEventListener("click", () => {
     manager.switchQuestionTypes();
+    manager.nextQuestion();
+    submitButton.disabled = true;
+    // Clear image selections and text input.
+    numImagesSelected = 0;
+    _deselect_images(imageContainers);
+    audioTextInput.innerHTML = "";
     // Check if the question type switch link should now be hidden.
     if (!manager.canSwithQuestionTypes()) {
       toggleLink.style.visibility = "hidden";
@@ -74,6 +76,11 @@ function main() {
     e.preventDefault();
   });
   
+  audioTextInput.addEventListener("input", () => {
+    const text = audioTextInput.innerHTML;
+    submitButton.disabled = text.length === 0;
+  });
+  
   audioTextInput.addEventListener("paste", e => {
     // Taken from https://developer.mozilla.org/en-US/docs/Web/Events/paste#JavaScript_2.
     e.preventDefault();
@@ -97,7 +104,17 @@ function main() {
     // Paste the modified clipboard content where it was intended to go
     selection.getRangeAt(0).insertNode(document.createTextNode(paste));
     selection.collapseToEnd();
+    const text = audioTextInput.innerHTML;
+    submitButton.disabled = text.length === 0;
   });
+}
+
+function _deselect_images(imageContainers) {
+  for (const ic of imageContainers) {
+    const img = ic.children[0];
+    const circle = ic.children[1];
+    _deselect(img, circle);
+  }
 }
 
 function _deselect(img, circle) {

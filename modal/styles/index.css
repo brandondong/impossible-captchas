@@ -61,12 +61,19 @@ td {
 }
 
 [contenteditable='true'] {
-  border: 1px solid darkgray;
-  box-shadow: 1px 1px 1px 0 lightgrey inset;
+  padding: 10px;
+  color: #495057;
+  border-radius: .25rem;
+  border: 1px solid #ced4da;
 }
 
 [contenteditable='true']:before {
   content: "\feff ";
+}
+
+audio {
+  margin-top: 30px;
+  margin-bottom: 30px;
 }
 
 div.image-container {

@@ -15,9 +15,9 @@ export default class CaptchaManager {
   
   canSwithQuestionTypes() {
     if (this.isImageMode) {
-      return this.numImageQuestionsAnswered >= 5;
+      return this.numImageQuestionsAnswered >= 3;
     }
-    return this.numAudioQuestionsAnswered >= 5;
+    return this.numAudioQuestionsAnswered >= 3;
   }
   
   switchQuestionTypes() {
