@@ -12,8 +12,8 @@
   <body class="no-select">
     <div class="container">
       <div class="prompt">
-        <p>Select all squares that contain</p>
-        <h1>blue</h1>
+        <p id="sentence">a</p>
+        <h1 id="word">b</h1>
       </div>
       
       <div id="images" class="images">
@@ -126,7 +126,7 @@
       </div>
       <div id="audio" class="audio">
         <audio controls>
-          <source src="horse.mp3" type="audio/mpeg">
+          <source id="source" type="audio/mpeg">
         </audio>
         <div id="audio-text" contenteditable="true" spellcheck="false"></div>
       </div>
