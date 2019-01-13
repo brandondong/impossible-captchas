@@ -15,9 +15,9 @@ function main() {
   const audioTextInput = document.getElementById("audio-text");
   
   // Initialize the two UI components.
-  let currentImageQuestion = _updateWithNextQuestion(manager, sentence, word, audioSource);
+  let currentImageQuestion = _updateWithNextQuestion(manager, sentence, word, audioSource, imageContainers);
   manager.switchQuestionTypes();
-  let currentAudioQuestion = _updateWithNextQuestion(manager, sentence, word, audioSource);
+  let currentAudioQuestion = _updateWithNextQuestion(manager, sentence, word, audioSource, imageContainers);
   manager.switchQuestionTypes();
   _updateQuestionText(currentImageQuestion, sentence, word);
   
@@ -30,7 +30,7 @@ function main() {
     // Disable the button.
     submitButton.disabled = true;
     // Update UI with next question.
-    const nextQuestion = _updateWithNextQuestion(manager, sentence, word, audioSource);
+    const nextQuestion = _updateWithNextQuestion(manager, sentence, word, audioSource, imageContainers);
     if (manager.isImageMode()) {
       currentImageQuestion = nextQuestion;
     } else {
@@ -69,16 +69,15 @@ function main() {
   for (const ic of imageContainers) {
     ic.addEventListener("click", () => {
       // Toggle selections appropriately.
-      const img = ic.children[0];
       const circle = ic.children[1];
-      if (img.style.filter) {
-        _deselect(img, circle);
+      if (_isSelected(circle)) {
+        _deselect(circle);
         numImagesSelected--;
         if (numImagesSelected === 0) {
           submitButton.disabled = true;
         }
       } else {
-        _select(img, circle);
+        _select(circle);
         numImagesSelected++;
         if (numImagesSelected === 1) {
           submitButton.disabled = false;
@@ -100,13 +99,18 @@ function main() {
   audioTextInput.addEventListener("paste", e => _handlePaste(e, audioTextInput, submitButton));
 }
 
-function _updateWithNextQuestion(manager, sentence, word, audioSource) {
+function _updateWithNextQuestion(manager, sentence, word, audioSource, imageContainers) {
   const questionDetails = manager.nextQuestion();
   const question = questionDetails.question;
   _updateQuestionText(question, sentence, word);
   if (manager.isImageMode()) {
+    const images = questionDetails.images;
+    for (let i = 0; i < 16; i++) {
+      const image = imageContainers[i].children[0];
+      image.src = images[i];
+    }
   } else {
-    audioSource.src = questionDetails.details.source;
+    audioSource.src = questionDetails.source;
   }
   return question;
 }
@@ -118,20 +122,21 @@ function _updateQuestionText(question, sentence, word) {
 
 function _deselectImages(imageContainers) {
   for (const ic of imageContainers) {
-    const img = ic.children[0];
     const circle = ic.children[1];
-    _deselect(img, circle);
+    _deselect(circle);
   }
 }
 
-function _deselect(img, circle) {
-  img.style.filter = "";
+function _deselect(circle) {
   circle.style.visibility = "hidden";
 }
 
-function _select(img, circle) {
-  img.style.filter = "brightness(0.7)";
+function _select(circle) {
   circle.style.visibility = "visible";
+}
+
+function _isSelected(circle) {
+  return circle.style.visibility === "visible";
 }
 
 function _handlePaste(e, audioTextInput, submitButton) {

@@ -3,6 +3,7 @@
 
   const RESOURCES = "resources/";
   const AUDIO = RESOURCES + "audio/";
+  const IMAGES = RESOURCES + "images/";
 
   class CaptchaManager {
     constructor() {
@@ -14,13 +15,14 @@
     nextQuestion() {
       if (this._isImageMode) {
         this.numImageQuestionsAnswered++;
-        const question = { sentence: "Select all squares that contain the colour", word: "green" };
-        return { question: question };
+        const question = { sentence: "Select all squares that contain the colour", word: "red" };
+        const images = _imageSet("strawberries", "png");
+        return { question: question, images: images };
       } else {
         this.numAudioQuestionsAnswered++;
         const question = { sentence: "Listen to the audio and type the", word: "words" };
-        const details = { source: AUDIO + "meatball_parade.mp3" };
-        return { question: question, details: details };
+        const source = AUDIO + "meatball_parade.mp3";
+        return { question: question, source: source };
       }
     }
     
@@ -40,6 +42,14 @@
     }
   }
 
+  function _imageSet(filename, ext) {
+    const imageSet = [];
+    for (let i = 0; i < 16; i++) {
+      imageSet.push(`${IMAGES}${filename}_${i}.${ext}`);
+    }
+    return imageSet;
+  }
+
   function main() {
     const manager = new CaptchaManager();
     let numImagesSelected = 0;
@@ -55,9 +65,9 @@
     const audioTextInput = document.getElementById("audio-text");
     
     // Initialize the two UI components.
-    let currentImageQuestion = _updateWithNextQuestion(manager, sentence, word, audioSource);
+    let currentImageQuestion = _updateWithNextQuestion(manager, sentence, word, audioSource, imageContainers);
     manager.switchQuestionTypes();
-    let currentAudioQuestion = _updateWithNextQuestion(manager, sentence, word, audioSource);
+    let currentAudioQuestion = _updateWithNextQuestion(manager, sentence, word, audioSource, imageContainers);
     manager.switchQuestionTypes();
     _updateQuestionText(currentImageQuestion, sentence, word);
     
@@ -70,7 +80,7 @@
       // Disable the button.
       submitButton.disabled = true;
       // Update UI with next question.
-      const nextQuestion = _updateWithNextQuestion(manager, sentence, word, audioSource);
+      const nextQuestion = _updateWithNextQuestion(manager, sentence, word, audioSource, imageContainers);
       if (manager.isImageMode()) {
         currentImageQuestion = nextQuestion;
       } else {
@@ -109,16 +119,15 @@
     for (const ic of imageContainers) {
       ic.addEventListener("click", () => {
         // Toggle selections appropriately.
-        const img = ic.children[0];
         const circle = ic.children[1];
-        if (img.style.filter) {
-          _deselect(img, circle);
+        if (_isSelected(circle)) {
+          _deselect(circle);
           numImagesSelected--;
           if (numImagesSelected === 0) {
             submitButton.disabled = true;
           }
         } else {
-          _select(img, circle);
+          _select(circle);
           numImagesSelected++;
           if (numImagesSelected === 1) {
             submitButton.disabled = false;
@@ -140,12 +149,18 @@
     audioTextInput.addEventListener("paste", e => _handlePaste(e, audioTextInput, submitButton));
   }
 
-  function _updateWithNextQuestion(manager, sentence, word, audioSource) {
+  function _updateWithNextQuestion(manager, sentence, word, audioSource, imageContainers) {
     const questionDetails = manager.nextQuestion();
     const question = questionDetails.question;
     _updateQuestionText(question, sentence, word);
-    if (manager.isImageMode()) ; else {
-      audioSource.src = questionDetails.details.source;
+    if (manager.isImageMode()) {
+      const images = questionDetails.images;
+      for (let i = 0; i < 16; i++) {
+        const image = imageContainers[i].children[0];
+        image.src = images[i];
+      }
+    } else {
+      audioSource.src = questionDetails.source;
     }
     return question;
   }
@@ -157,20 +172,21 @@
 
   function _deselectImages(imageContainers) {
     for (const ic of imageContainers) {
-      const img = ic.children[0];
       const circle = ic.children[1];
-      _deselect(img, circle);
+      _deselect(circle);
     }
   }
 
-  function _deselect(img, circle) {
-    img.style.filter = "";
+  function _deselect(circle) {
     circle.style.visibility = "hidden";
   }
 
-  function _select(img, circle) {
-    img.style.filter = "brightness(0.7)";
+  function _select(circle) {
     circle.style.visibility = "visible";
+  }
+
+  function _isSelected(circle) {
+    return circle.style.visibility === "visible";
   }
 
   function _handlePaste(e, audioTextInput, submitButton) {

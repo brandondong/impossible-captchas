@@ -1,5 +1,6 @@
 const RESOURCES = "resources/";
 const AUDIO = RESOURCES + "audio/";
+const IMAGES = RESOURCES + "images/";
 
 export default class CaptchaManager {
   constructor() {
@@ -11,13 +12,14 @@ export default class CaptchaManager {
   nextQuestion() {
     if (this._isImageMode) {
       this.numImageQuestionsAnswered++;
-      const question = { sentence: "Select all squares that contain the colour", word: "green" };
-      return { question: question };
+      const question = { sentence: "Select all squares that contain the colour", word: "red" };
+      const images = _imageSet("strawberries", "png");
+      return { question: question, images: images };
     } else {
       this.numAudioQuestionsAnswered++;
       const question = { sentence: "Listen to the audio and type the", word: "words" };
-      const details = { source: AUDIO + "meatball_parade.mp3" };
-      return { question: question, details: details };
+      const source = AUDIO + "meatball_parade.mp3"
+      return { question: question, source: source };
     }
   }
   
@@ -35,4 +37,12 @@ export default class CaptchaManager {
   isImageMode() {
     return this._isImageMode;
   }
+}
+
+function _imageSet(filename, ext) {
+  const imageSet = [];
+  for (let i = 0; i < 16; i++) {
+    imageSet.push(`${IMAGES}${filename}_${i}.${ext}`);
+  }
+  return imageSet;
 }
