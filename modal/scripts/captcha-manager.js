@@ -2,6 +2,11 @@ const RESOURCES = "resources/";
 const AUDIO = RESOURCES + "audio/";
 const IMAGES = RESOURCES + "images/";
 
+const IMAGE_QUESTIONS = [
+  { question: { sentence: "Select all squares that contain the colour", word: "red" }, imagesFunc: () => _imageSet("strawberries", "png") },
+  { question: { sentence: "Select all squares that contain", word: "black dots" }, imagesFunc: () => _imageSet("grid_illusion", "png") }
+];
+
 export default class CaptchaManager {
   constructor() {
     this._isImageMode = true;
@@ -12,8 +17,9 @@ export default class CaptchaManager {
   nextQuestion() {
     if (this._isImageMode) {
       this.numImageQuestionsAnswered++;
-      const question = { sentence: "Select all squares that contain the colour", word: "red" };
-      const images = _imageSet("strawberries", "png");
+      const questionDetails = this._nextImageQuestion();
+      const question = questionDetails.question;
+      const images = questionDetails.imagesFunc();
       return { question: question, images: images };
     } else {
       this.numAudioQuestionsAnswered++;
@@ -36,6 +42,13 @@ export default class CaptchaManager {
   
   isImageMode() {
     return this._isImageMode;
+  }
+  
+  _nextImageQuestion() {
+    if (this.numImageQuestionsAnswered > 1) {
+      return IMAGE_QUESTIONS[1];
+    }
+    return IMAGE_QUESTIONS[this.numImageQuestionsAnswered];
   }
 }
 

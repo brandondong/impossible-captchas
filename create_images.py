@@ -15,9 +15,9 @@ im.thumbnail((TOTAL_IMAGE_DIMENSION, TOTAL_IMAGE_DIMENSION))
 draw = ImageDraw.Draw(im)
 for i in range(3):
 	x0 = (i + 1) * 100 + i * 4
-	x1 = x0 + 4
-	draw.rectangle([(x0, 0), (x1, TOTAL_IMAGE_DIMENSION)], fill=WHITE)
-	draw.rectangle([(0, x0), (TOTAL_IMAGE_DIMENSION, x1)], fill=WHITE)
+	x1 = x0 + 3
+	draw.rectangle([(x0, 0), (x1, TOTAL_IMAGE_DIMENSION - 1)], fill=WHITE)
+	draw.rectangle([(0, x0), (TOTAL_IMAGE_DIMENSION - 1, x1)], fill=WHITE)
 del draw
 
 im.show()
