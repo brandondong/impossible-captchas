@@ -4,7 +4,8 @@ const IMAGES = RESOURCES + "images/";
 
 const IMAGE_QUESTIONS = [
   { question: { sentence: "Select all squares that contain the colour", word: "red" }, imagesFunc: () => _imageSet("strawberries", "png") },
-  { question: { sentence: "Select all squares that contain", word: "black dots" }, imagesFunc: () => _imageSet("grid_illusion", "png") }
+  { question: { sentence: "Select all squares that contain", word: "black dots" }, imagesFunc: () => _imageSet("grid_illusion", "png") },
+  { question: { sentence: "Select squares with text printed in a colour with", word: "five letters" }, imagesFunc: _stroopEffect }  
 ];
 
 export default class CaptchaManager {
@@ -45,8 +46,8 @@ export default class CaptchaManager {
   }
   
   _nextImageQuestion() {
-    if (this.numImageQuestionsAnswered > 1) {
-      return IMAGE_QUESTIONS[1];
+    if (this.numImageQuestionsAnswered >= IMAGE_QUESTIONS.length) {
+      return IMAGE_QUESTIONS[IMAGE_QUESTIONS.length - 1];
     }
     return IMAGE_QUESTIONS[this.numImageQuestionsAnswered];
   }
@@ -58,4 +59,21 @@ function _imageSet(filename, ext) {
     imageSet.push(`${IMAGES}${filename}_${i}.${ext}`);
   }
   return imageSet;
+}
+
+function _stroopEffect() {
+  const images = _imageSet("stroop", "png");
+  _shuffleArray(images, 0, 3);
+  _shuffleArray(images, 4, 15);
+  return images;
+}
+
+function _shuffleArray(array, start, end) {
+  // Taken from https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array.
+  for (let i = end - start; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const actualI = i + start;
+    const actualJ = j + start;
+    [array[actualI], array[actualJ]] = [array[actualJ], array[actualI]];
+  }
 }
