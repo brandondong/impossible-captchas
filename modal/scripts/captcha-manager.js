@@ -8,6 +8,16 @@ const IMAGE_QUESTIONS = [
   { question: { sentence: "Select squares with text printed in a colour with", word: "five letters" }, imagesFunc: _stroopEffect }  
 ];
 
+const AUDIO_QUESTIONS = [
+  { source: _audioPath("pair_pear.mp3") },
+  { source: _audioPath("beat_tracking.mp3") },
+  { source: _audioPath("omelette.mp3") },
+  { source: _audioPath("poland.mp3") },
+  { source: _audioPath("vinny.mp3") },
+  { source: _audioPath("moo.mp3") },
+  { source: _audioPath("meatball_parade.mp3") }
+];
+
 export default class CaptchaManager {
   constructor() {
     this._isImageMode = true;
@@ -18,14 +28,15 @@ export default class CaptchaManager {
   nextQuestion() {
     if (this._isImageMode) {
       this.numImageQuestionsAnswered++;
-      const questionDetails = this._nextImageQuestion();
+      const questionDetails = this._nextQuestionDetail(IMAGE_QUESTIONS, this.numImageQuestionsAnswered);
       const question = questionDetails.question;
       const images = questionDetails.imagesFunc();
       return { question: question, images: images };
     } else {
       this.numAudioQuestionsAnswered++;
+      const questionDetails = this._nextQuestionDetail(AUDIO_QUESTIONS, this.numAudioQuestionsAnswered);
       const question = { sentence: "Listen to the audio and type the", word: "words" };
-      const source = AUDIO + "meatball_parade.mp3"
+      const source = questionDetails.source;
       return { question: question, source: source };
     }
   }
@@ -45,11 +56,11 @@ export default class CaptchaManager {
     return this._isImageMode;
   }
   
-  _nextImageQuestion() {
-    if (this.numImageQuestionsAnswered >= IMAGE_QUESTIONS.length) {
-      return IMAGE_QUESTIONS[IMAGE_QUESTIONS.length - 1];
+  _nextQuestionDetail(a, numAnswered) {
+    if (numAnswered >= a.length) {
+      return a[a.length - 1];
     }
-    return IMAGE_QUESTIONS[this.numImageQuestionsAnswered];
+    return a[numAnswered];
   }
 }
 
@@ -66,6 +77,10 @@ function _stroopEffect() {
   _shuffleArray(images, 0, 3);
   _shuffleArray(images, 4, 15);
   return images;
+}
+
+function _audioPath(filename) {
+   return AUDIO + filename;
 }
 
 function _shuffleArray(array, start, end) {

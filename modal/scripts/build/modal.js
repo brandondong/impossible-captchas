@@ -11,6 +11,16 @@
     { question: { sentence: "Select squares with text printed in a colour with", word: "five letters" }, imagesFunc: _stroopEffect }  
   ];
 
+  const AUDIO_QUESTIONS = [
+    { source: _audioPath("pair_pear.mp3") },
+    { source: _audioPath("beat_tracking.mp3") },
+    { source: _audioPath("omelette.mp3") },
+    { source: _audioPath("poland.mp3") },
+    { source: _audioPath("vinny.mp3") },
+    { source: _audioPath("moo.mp3") },
+    { source: _audioPath("meatball_parade.mp3") }
+  ];
+
   class CaptchaManager {
     constructor() {
       this._isImageMode = true;
@@ -21,14 +31,15 @@
     nextQuestion() {
       if (this._isImageMode) {
         this.numImageQuestionsAnswered++;
-        const questionDetails = this._nextImageQuestion();
+        const questionDetails = this._nextQuestionDetail(IMAGE_QUESTIONS, this.numImageQuestionsAnswered);
         const question = questionDetails.question;
         const images = questionDetails.imagesFunc();
         return { question: question, images: images };
       } else {
         this.numAudioQuestionsAnswered++;
+        const questionDetails = this._nextQuestionDetail(AUDIO_QUESTIONS, this.numAudioQuestionsAnswered);
         const question = { sentence: "Listen to the audio and type the", word: "words" };
-        const source = AUDIO + "meatball_parade.mp3";
+        const source = questionDetails.source;
         return { question: question, source: source };
       }
     }
@@ -48,11 +59,11 @@
       return this._isImageMode;
     }
     
-    _nextImageQuestion() {
-      if (this.numImageQuestionsAnswered >= IMAGE_QUESTIONS.length) {
-        return IMAGE_QUESTIONS[IMAGE_QUESTIONS.length - 1];
+    _nextQuestionDetail(a, numAnswered) {
+      if (numAnswered >= a.length) {
+        return a[a.length - 1];
       }
-      return IMAGE_QUESTIONS[this.numImageQuestionsAnswered];
+      return a[numAnswered];
     }
   }
 
@@ -71,6 +82,10 @@
     return images;
   }
 
+  function _audioPath(filename) {
+     return AUDIO + filename;
+  }
+
   function _shuffleArray(array, start, end) {
     // Taken from https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array.
     for (let i = end - start; i > 0; i--) {
@@ -84,6 +99,7 @@
   function main() {
     const manager = new CaptchaManager();
     let numImagesSelected = 0;
+    let isSubmitting = false;
     
     const sentence = document.getElementById("sentence");
     const word = document.getElementById("word");
@@ -92,35 +108,41 @@
     const imageContainers = document.getElementsByClassName("image-container");
     const imageSection = document.getElementById("images");
     const audioSection = document.getElementById("audio");
+    const audio = document.getElementById("audio-load");
     const audioSource = document.getElementById("source");
     const audioTextInput = document.getElementById("audio-text");
     
     // Initialize the two UI components.
-    let currentImageQuestion = _updateWithNextQuestion(manager, sentence, word, audioSource, imageContainers);
+    let currentImageQuestion = _updateWithNextQuestion(manager, sentence, word, audio, audioSource, imageContainers);
     manager.switchQuestionTypes();
-    let currentAudioQuestion = _updateWithNextQuestion(manager, sentence, word, audioSource, imageContainers);
+    let currentAudioQuestion = _updateWithNextQuestion(manager, sentence, word, audio, audioSource, imageContainers);
     manager.switchQuestionTypes();
     _updateQuestionText(currentImageQuestion, sentence, word);
     
     submitButton.addEventListener("click", () => {
-      // Clear image selections.
-      numImagesSelected = 0;
-      _deselectImages(imageContainers);
-      // Clear the input field.
-      audioTextInput.innerHTML = "";
+      isSubmitting = true;
       // Disable the button.
       submitButton.disabled = true;
-      // Update UI with next question.
-      const nextQuestion = _updateWithNextQuestion(manager, sentence, word, audioSource, imageContainers);
-      if (manager.isImageMode()) {
-        currentImageQuestion = nextQuestion;
-      } else {
-        currentAudioQuestion = nextQuestion;
-      }
-      // Check if the question type switch link can now be shown.
-      if (manager.canSwithQuestionTypes()) {
-        toggleLink.style.visibility = "visible";
-      }
+      audio.pause();
+      setTimeout(() => {
+        isSubmitting = false;
+        // Clear image selections.
+        numImagesSelected = 0;
+        _deselectImages(imageContainers);
+        // Clear the input field.
+        audioTextInput.innerHTML = "";
+        // Update UI with next question.
+        const nextQuestion = _updateWithNextQuestion(manager, sentence, word, audio, audioSource, imageContainers);
+        if (manager.isImageMode()) {
+          currentImageQuestion = nextQuestion;
+        } else {
+          currentAudioQuestion = nextQuestion;
+        }
+        // Check if the question type switch link can now be shown.
+        if (manager.canSwithQuestionTypes()) {
+          toggleLink.style.visibility = "visible";
+        }
+      }, 500);
     });
     toggleLink.addEventListener("click", () => {
       manager.switchQuestionTypes();
@@ -149,6 +171,9 @@
     });
     for (const ic of imageContainers) {
       ic.addEventListener("click", () => {
+        if (isSubmitting) {
+          return;
+        }
         // Toggle selections appropriately.
         const circle = ic.children[1];
         if (_isSelected(circle)) {
@@ -180,7 +205,7 @@
     audioTextInput.addEventListener("paste", e => _handlePaste(e, audioTextInput, submitButton));
   }
 
-  function _updateWithNextQuestion(manager, sentence, word, audioSource, imageContainers) {
+  function _updateWithNextQuestion(manager, sentence, word, audio, audioSource, imageContainers) {
     const questionDetails = manager.nextQuestion();
     const question = questionDetails.question;
     _updateQuestionText(question, sentence, word);
@@ -192,6 +217,7 @@
       }
     } else {
       audioSource.src = questionDetails.source;
+      audio.load();
     }
     return question;
   }
