@@ -13,11 +13,9 @@
 
   const AUDIO_QUESTIONS = [
     { source: _audioPath("pair_pear.mp3") },
-    { source: _audioPath("beat_tracking.mp3") },
-    { source: _audioPath("omelette.mp3") },
     { source: _audioPath("poland.mp3") },
     { source: _audioPath("vinny.mp3") },
-    { source: _audioPath("moo.mp3") },
+    { source: _audioPath("bark.mp3") },
     { source: _audioPath("meatball_parade.mp3") }
   ];
 
@@ -46,9 +44,9 @@
     
     canSwithQuestionTypes() {
       if (this._isImageMode) {
-        return this.numImageQuestionsAnswered >= 3;
+        return this.numImageQuestionsAnswered >= 3 && this._hasAudioQuestionsLeft();
       }
-      return this.numAudioQuestionsAnswered >= 3;
+      return this.numAudioQuestionsAnswered >= 3 && this._hasImageQuestionsLeft();
     }
     
     switchQuestionTypes() {
@@ -57,6 +55,14 @@
     
     isImageMode() {
       return this._isImageMode;
+    }
+    
+    _hasImageQuestionsLeft() {
+      return this.numImageQuestionsAnswered < IMAGE_QUESTIONS.length;
+    }
+    
+    _hasAudioQuestionsLeft() {
+      return this.numAudioQuestionsAnswered < AUDIO_QUESTIONS.length;
     }
     
     _nextQuestionDetail(a, numAnswered) {
@@ -147,10 +153,13 @@
     toggleLink.addEventListener("click", () => {
       manager.switchQuestionTypes();
       submitButton.disabled = true;
-      // Clear image selections and text input.
+      // Reset the image component.
       numImagesSelected = 0;
       _deselectImages(imageContainers);
+      // And the audio component.
       audioTextInput.innerHTML = "";
+      audio.pause();		
+      audio.currentTime = 0;
       // Check if the question type switch link should now be hidden.
       if (!manager.canSwithQuestionTypes()) {
         toggleLink.style.visibility = "hidden";

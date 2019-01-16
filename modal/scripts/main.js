@@ -51,10 +51,13 @@ function main() {
   toggleLink.addEventListener("click", () => {
     manager.switchQuestionTypes();
     submitButton.disabled = true;
-    // Clear image selections and text input.
+    // Reset the image component.
     numImagesSelected = 0;
     _deselectImages(imageContainers);
+    // And the audio component.
     audioTextInput.innerHTML = "";
+    audio.pause();		
+    audio.currentTime = 0;
     // Check if the question type switch link should now be hidden.
     if (!manager.canSwithQuestionTypes()) {
       toggleLink.style.visibility = "hidden";

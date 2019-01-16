@@ -10,11 +10,9 @@ const IMAGE_QUESTIONS = [
 
 const AUDIO_QUESTIONS = [
   { source: _audioPath("pair_pear.mp3") },
-  { source: _audioPath("beat_tracking.mp3") },
-  { source: _audioPath("omelette.mp3") },
   { source: _audioPath("poland.mp3") },
   { source: _audioPath("vinny.mp3") },
-  { source: _audioPath("moo.mp3") },
+  { source: _audioPath("bark.mp3") },
   { source: _audioPath("meatball_parade.mp3") }
 ];
 
@@ -43,9 +41,9 @@ export default class CaptchaManager {
   
   canSwithQuestionTypes() {
     if (this._isImageMode) {
-      return this.numImageQuestionsAnswered >= 3;
+      return this.numImageQuestionsAnswered >= 3 && this._hasAudioQuestionsLeft();
     }
-    return this.numAudioQuestionsAnswered >= 3;
+    return this.numAudioQuestionsAnswered >= 3 && this._hasImageQuestionsLeft();
   }
   
   switchQuestionTypes() {
@@ -54,6 +52,14 @@ export default class CaptchaManager {
   
   isImageMode() {
     return this._isImageMode;
+  }
+  
+  _hasImageQuestionsLeft() {
+    return this.numImageQuestionsAnswered < IMAGE_QUESTIONS.length;
+  }
+  
+  _hasAudioQuestionsLeft() {
+    return this.numAudioQuestionsAnswered < AUDIO_QUESTIONS.length;
   }
   
   _nextQuestionDetail(a, numAnswered) {
