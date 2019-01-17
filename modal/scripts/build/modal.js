@@ -6,9 +6,10 @@
   const IMAGES = RESOURCES + "images/";
 
   const IMAGE_QUESTIONS = [
+    { question: { sentence: "Select all squares that contain the colour", word: "white" }, imagesFunc: () => _shuffleArray(_imageSet("white", "jpg"), 0, 14) },
     { question: { sentence: "Select all squares that contain the colour", word: "red" }, imagesFunc: () => _imageSet("strawberries", "png") },
     { question: { sentence: "Select all squares that contain", word: "black dots" }, imagesFunc: () => _imageSet("grid_illusion", "png") },
-    { question: { sentence: "Select squares with text printed in a colour with", word: "five letters" }, imagesFunc: _stroopEffect }  
+    { question: { sentence: "Select squares with text printed in a colour with", word: "five letters" }, imagesFunc: _stroopEffect }
   ];
 
   const AUDIO_QUESTIONS = [
@@ -76,7 +77,7 @@
   function _imageSet(filename, ext) {
     const imageSet = [];
     for (let i = 0; i < 16; i++) {
-      imageSet.push(`${IMAGES}${filename}_${i}.${ext}`);
+      imageSet.push(`${IMAGES}${filename}/${filename}_${i}.${ext}`);
     }
     return imageSet;
   }
@@ -100,6 +101,7 @@
       const actualJ = j + start;
       [array[actualI], array[actualJ]] = [array[actualJ], array[actualI]];
     }
+    return array;
   }
 
   function main() {
