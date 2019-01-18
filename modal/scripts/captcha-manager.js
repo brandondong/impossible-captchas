@@ -27,12 +27,22 @@ export default class CaptchaManager {
   nextQuestion() {
     if (this._isImageMode) {
       this.numImageQuestionsAnswered++;
+    } else {
+      this.numAudioQuestionsAnswered++;
+    }
+    const hasImageQuestions = this._hasImageQuestionsLeft();
+    const hasAudioQuestions = this._hasAudioQuestionsLeft();
+    if (!hasImageQuestions && !hasAudioQuestions) {
+      return;
+    }
+    if (!hasAudioQuestions || (this._isImageMode && hasImageQuestions)) {
+      this._isImageMode = true;
       const questionDetails = this._nextQuestionDetail(IMAGE_QUESTIONS, this.numImageQuestionsAnswered);
       const question = questionDetails.question;
       const images = questionDetails.imagesFunc();
       return { question: question, images: images };
     } else {
-      this.numAudioQuestionsAnswered++;
+      this._isImageMode = false;
       const questionDetails = this._nextQuestionDetail(AUDIO_QUESTIONS, this.numAudioQuestionsAnswered);
       const question = { sentence: "Listen to the audio and type the", word: "words" };
       const source = questionDetails.source;

@@ -30,12 +30,22 @@
     nextQuestion() {
       if (this._isImageMode) {
         this.numImageQuestionsAnswered++;
+      } else {
+        this.numAudioQuestionsAnswered++;
+      }
+      const hasImageQuestions = this._hasImageQuestionsLeft();
+      const hasAudioQuestions = this._hasAudioQuestionsLeft();
+      if (!hasImageQuestions && !hasAudioQuestions) {
+        return;
+      }
+      if (!hasAudioQuestions || (this._isImageMode && hasImageQuestions)) {
+        this._isImageMode = true;
         const questionDetails = this._nextQuestionDetail(IMAGE_QUESTIONS, this.numImageQuestionsAnswered);
         const question = questionDetails.question;
         const images = questionDetails.imagesFunc();
         return { question: question, images: images };
       } else {
-        this.numAudioQuestionsAnswered++;
+        this._isImageMode = false;
         const questionDetails = this._nextQuestionDetail(AUDIO_QUESTIONS, this.numAudioQuestionsAnswered);
         const question = { sentence: "Listen to the audio and type the", word: "words" };
         const source = questionDetails.source;
@@ -121,11 +131,11 @@
     const audioTextInput = document.getElementById("audio-text");
     
     // Initialize the two UI components.
-    let currentImageQuestion = _updateWithNextQuestion(manager, sentence, word, audio, audioSource, imageContainers);
+    let currentImageQuestion = _updateWithNextQuestion(manager, sentence, word, audio, audioSource, imageContainers, imageSection, audioSection, toggleLink);
     manager.switchQuestionTypes();
-    let currentAudioQuestion = _updateWithNextQuestion(manager, sentence, word, audio, audioSource, imageContainers);
+    let currentAudioQuestion = _updateWithNextQuestion(manager, sentence, word, audio, audioSource, imageContainers, imageSection, audioSection, toggleLink);
     manager.switchQuestionTypes();
-    _updateQuestionText(currentImageQuestion, sentence, word);
+    _switchToImageSection(imageSection, audioSection, toggleLink, currentImageQuestion, sentence, word);
     
     submitButton.addEventListener("click", () => {
       isSubmitting = true;
@@ -140,16 +150,18 @@
         // Clear the input field.
         audioTextInput.innerHTML = "";
         // Update UI with next question.
-        const nextQuestion = _updateWithNextQuestion(manager, sentence, word, audio, audioSource, imageContainers);
+        const nextQuestion = _updateWithNextQuestion(manager, sentence, word, audio, audioSource, imageContainers, imageSection, audioSection, toggleLink);
+        if (!nextQuestion) {
+          alert("Out of questions!");
+          return;
+        }
         if (manager.isImageMode()) {
           currentImageQuestion = nextQuestion;
         } else {
           currentAudioQuestion = nextQuestion;
         }
-        // Check if the question type switch link can now be shown.
-        if (manager.canSwithQuestionTypes()) {
-          toggleLink.style.visibility = "visible";
-        }
+        // Update toggle link visibility.
+        _updateToggleLink(manager, toggleLink);
       }, 500);
     });
     toggleLink.addEventListener("click", () => {
@@ -162,22 +174,14 @@
       audioTextInput.innerHTML = "";
       audio.pause();		
       audio.currentTime = 0;
-      // Check if the question type switch link should now be hidden.
-      if (!manager.canSwithQuestionTypes()) {
-        toggleLink.style.visibility = "hidden";
-      }
+      // Update toggle link visibility.
+      _updateToggleLink(manager, toggleLink);
       if (manager.isImageMode()) {
         // Switch to image questions.
-        imageSection.style.display = "block";
-        audioSection.style.display = "none";
-        toggleLink.innerHTML = "I am visually impaired.";
-        _updateQuestionText(currentImageQuestion, sentence, word);
+        _switchToImageSection(imageSection, audioSection, toggleLink, currentImageQuestion, sentence, word);
       } else {
         // Switch to audio questions.
-        imageSection.style.display = "none";
-        audioSection.style.display = "block";
-        toggleLink.innerHTML = "I am hearing impaired.";
-        _updateQuestionText(currentAudioQuestion, sentence, word);
+        _switchToAudioSection(imageSection, audioSection, toggleLink, currentAudioQuestion, sentence, word);
       }
     });
     for (const ic of imageContainers) {
@@ -216,19 +220,25 @@
     audioTextInput.addEventListener("paste", e => _handlePaste(e, audioTextInput, submitButton));
   }
 
-  function _updateWithNextQuestion(manager, sentence, word, audio, audioSource, imageContainers) {
+  function _updateWithNextQuestion(manager, sentence, word, audio, audioSource, imageContainers, imageSection, audioSection, toggleLink) {
     const questionDetails = manager.nextQuestion();
+    if (!questionDetails) {
+      return;
+    }
     const question = questionDetails.question;
-    _updateQuestionText(question, sentence, word);
     if (manager.isImageMode()) {
       const images = questionDetails.images;
       for (let i = 0; i < 16; i++) {
         const image = imageContainers[i].children[0];
         image.src = images[i];
       }
+      // Switch to image questions if needed.
+      _switchToImageSection(imageSection, audioSection, toggleLink, question, sentence, word);
     } else {
       audioSource.src = questionDetails.source;
       audio.load();
+      // Switch to audio questions if needed.
+      _switchToAudioSection(imageSection, audioSection, toggleLink, question, sentence, word);
     }
     return question;
   }
@@ -255,6 +265,28 @@
 
   function _isSelected(circle) {
     return circle.style.visibility === "visible";
+  }
+
+  function _switchToImageSection(imageSection, audioSection, toggleLink, currentImageQuestion, sentence, word) {
+    imageSection.style.display = "block";
+    audioSection.style.display = "none";
+    toggleLink.innerHTML = "I am visually impaired.";
+    _updateQuestionText(currentImageQuestion, sentence, word);
+  }
+
+  function _switchToAudioSection(imageSection, audioSection, toggleLink, currentAudioQuestion, sentence, word) {
+    imageSection.style.display = "none";
+    audioSection.style.display = "block";
+    toggleLink.innerHTML = "I am hearing impaired.";
+    _updateQuestionText(currentAudioQuestion, sentence, word);
+  }
+
+  function _updateToggleLink(manager, toggleLink) {
+    if (manager.canSwithQuestionTypes()) {
+      toggleLink.style.visibility = "visible";
+    } else {
+      toggleLink.style.visibility = "hidden";
+    }
   }
 
   function _handlePaste(e, audioTextInput, submitButton) {
