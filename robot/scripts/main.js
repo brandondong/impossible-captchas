@@ -18,11 +18,22 @@ function main() {
     }
   });
   checkbox.addEventListener("animationend", e => {
+    if (e.animationName === "perm-failure") {
+      // Keep the checkbox permanently disabled.
+      return;
+    }
     animationPlaying = false;
     checkbox.classList.remove(e.animationName);
     checkbox.style.cursor = "pointer";
     if (e.animationName === "success") {
       window.parent.postMessage("robot_success", "*");
+    }
+  }, false);
+  window.addEventListener("message", e => {
+    if (e.data === "modal_fail") {
+      animationPlaying = true;
+      checkbox.style.cursor = "default";
+      checkbox.classList.add("perm-failure");
     }
   }, false);
 }

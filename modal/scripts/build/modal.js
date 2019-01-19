@@ -153,7 +153,7 @@
         // Update UI with next question.
         const nextQuestion = _updateWithNextQuestion(manager, sentence, word, audio, audioSource, imageContainers, imageSection, audioSection, toggleLink);
         if (!nextQuestion) {
-          alert("Out of questions!");
+          window.parent.postMessage("modal_failure", "*");
           return;
         }
         if (manager.isImageMode()) {

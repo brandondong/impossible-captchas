@@ -17,6 +17,7 @@
     
     fixedSizeDiv.appendChild(iframe);
     elem.appendChild(fixedSizeDiv);
+    return iframe;
   }
 
   class Modal {
@@ -77,18 +78,28 @@
         { opacity: 1 }
       ], { ease: "ease", duration: 400 });
     }
+    
+    close() {
+      this.md.style.display = "none";
+    }
   }
 
   function main() {
     const captchas = document.getElementsByClassName("i-captcha");
+    const iframes = [];
     for (const elem of captchas) {
-      createCaptchaElement(elem);
+      iframes.push(createCaptchaElement(elem));
     }
     
     const modal = new Modal();
     window.addEventListener("message", e => {
       if (e.data === "robot_success") {
         modal.open();
+      } else if (e.data === "modal_failure") {
+        modal.close();
+        for (const iframe of iframes) {
+          iframe.contentWindow.postMessage("modal_fail", "*");
+        }
       }
     }, false);
   }

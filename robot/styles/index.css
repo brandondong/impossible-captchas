@@ -79,6 +79,15 @@ span.checkbox-border {
   }
 }
 
+@keyframes perm-failure {
+  0% {
+    border-color: rgb(86, 165, 251);
+  }
+  100% {
+    border-color: #ff727d;
+  }
+}
+
 span.checkbox-border.success {
   animation-name: success;
   animation-duration: 8s;
@@ -89,6 +98,13 @@ span.checkbox-border.failure {
   animation-name: failure;
   animation-duration: 8s;
   animation-timing-function: linear;
+}
+
+span.checkbox-border.perm-failure {
+  animation-name: perm-failure;
+  animation-duration: 1s;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
 }
 
 .no-select {

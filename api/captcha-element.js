@@ -14,4 +14,5 @@ export default function createCaptchaElement(elem) {
   
   fixedSizeDiv.appendChild(iframe);
   elem.appendChild(fixedSizeDiv);
+  return iframe;
 }

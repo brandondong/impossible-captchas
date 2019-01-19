@@ -56,4 +56,8 @@ export default class Modal {
       { opacity: 1 }
     ], { ease: "ease", duration: 400 });
   }
+  
+  close() {
+    this.md.style.display = "none";
+  }
 }
