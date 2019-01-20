@@ -5,9 +5,10 @@ const IMAGES = RESOURCES + "images/";
 const IMAGE_QUESTIONS = [
   { question: { sentence: "Select all squares that contain the colour", word: "white" }, imagesFunc: () => _shuffleArray(_imageSet("white", "jpg"), 0, 14) },
   { question: { sentence: "Select all squares that contain", word: "animals" }, imagesFunc: () => _shuffleArray(_imageSet("animals", "jpg"), 0, 14) },
+  { question: { sentence: "Select all squares that contain", word: "vegetables" }, imagesFunc: () => _shuffleArray(_imageSet("vegetables", "jpg"), 0, 14) },
   { question: { sentence: "Select all squares that contain the colour", word: "red" }, imagesFunc: () => _imageSet("strawberries", "png") },
   { question: { sentence: "Select all squares that contain", word: "black dots" }, imagesFunc: () => _imageSet("grid_illusion", "png") },
-  { question: { sentence: "Select squares with text printed in a colour with", word: "five letters" }, imagesFunc: _stroopEffect }
+  { question: { sentence: "Select squares where the colour of the text has", word: "five letters" }, imagesFunc: _stroopEffect }
 ];
 
 const AUDIO_QUESTIONS = [
