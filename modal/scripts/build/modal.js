@@ -7,8 +7,9 @@
 
   const IMAGE_QUESTIONS = [
     { question: { sentence: "Select all squares that contain the colour", word: "white" }, imagesFunc: () => _shuffleArray(_imageSet("white", "jpg"), 0, 14) },
-    { question: { sentence: "Select all squares that contain", word: "animals" }, imagesFunc: () => _shuffleArray(_imageSet("animals", "jpg"), 0, 14) },
-    { question: { sentence: "Select all squares that contain", word: "vegetables" }, imagesFunc: () => _shuffleArray(_imageSet("vegetables", "jpg"), 0, 14) },
+    { question: { sentence: "Select all squares that contain", word: "animals" }, imagesFunc: () => _shuffleArray(_imageSet("animals", "jpg"), 0, 15) },
+    { question: { sentence: "Select all squares that contain", word: "vegetables" }, imagesFunc: () => _shuffleArray(_imageSet("vegetables", "jpg"), 0, 15) },
+    { question: { sentence: "Select all squares that contain", word: "vehicles" }, imagesFunc: () => _shuffleArray(_imageSet("vehicles", "jpg"), 0, 15) },
     { question: { sentence: "Select all squares that contain the colour", word: "red" }, imagesFunc: () => _imageSet("strawberries", "png") },
     { question: { sentence: "Select all squares that contain", word: "black dots" }, imagesFunc: () => _imageSet("grid_illusion", "png") },
     { question: { sentence: "Select squares where the colour of the text has", word: "five letters" }, imagesFunc: _stroopEffect }
@@ -18,6 +19,7 @@
     { source: _audioPath("pair_pear.mp3") },
     { source: _audioPath("poland.mp3") },
     { source: _audioPath("vinny.mp3") },
+    { source: _audioPath("laugh.mp3") },
     { source: _audioPath("bark.mp3") },
     { source: _audioPath("meatball_parade.mp3") }
   ];
