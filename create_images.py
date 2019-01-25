@@ -7,7 +7,6 @@ TOTAL_IMAGE_DIMENSION = 412
 WHITE = (255,255,255,255)
 
 filename = sys.argv[1]
-save_as_png = len(sys.argv) == 3
 im = Image.open(filename)
 im.thumbnail((TOTAL_IMAGE_DIMENSION, TOTAL_IMAGE_DIMENSION))
 
@@ -22,7 +21,8 @@ del draw
 
 im.show()
 
-filename_without_ext = os.path.splitext(filename)[0]
+filename_without_ext, ext = os.path.splitext(filename)
+save_as_png = ext == "png"
 for i in range(16):
 	row = i // 4
 	column = i % 4

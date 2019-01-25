@@ -22,6 +22,7 @@ const PLAUSIBLE_AUDIO_QUESTIONS = [
 
 const IMPLAUSIBLE_AUDIO_QUESTIONS = [
   { source: _audioPath("poland.mp3") },
+  { source: _audioPath("laurel_yanny.mp3") },
   { source: _audioPath("vinny.mp3") },
   { source: _audioPath("laugh.mp3") },
   { source: _audioPath("bark.mp3") },
