@@ -8,7 +8,7 @@ WHITE = (255,255,255,255)
 
 filename = sys.argv[1]
 im = Image.open(filename)
-im.thumbnail((TOTAL_IMAGE_DIMENSION, TOTAL_IMAGE_DIMENSION))
+im = im.resize((TOTAL_IMAGE_DIMENSION, TOTAL_IMAGE_DIMENSION))
 
 # Draw borders to visualize the split.
 draw = ImageDraw.Draw(im)

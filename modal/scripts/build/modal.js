@@ -6,7 +6,7 @@
   const IMAGES = RESOURCES + "images/";
 
   const PLAUSIBLE_IMAGE_QUESTIONS = [
-    { question: { sentence: "Dummy question for", word: "testing" }, imagesFunc: _stroopEffect }
+    { question: { sentence: "Select all squares that contain", word: "hills" }, imagesFunc: () => _imageSet("egypt_hill", "jpg") }
   ];
 
   const IMPLAUSIBLE_IMAGE_QUESTIONS = [
