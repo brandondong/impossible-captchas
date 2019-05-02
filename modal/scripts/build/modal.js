@@ -6,17 +6,18 @@
   const IMAGES = RESOURCES + "images/";
 
   const PLAUSIBLE_IMAGE_QUESTIONS = [
-    { question: { sentence: "Select all squares that contain", word: "hills" }, imagesFunc: () => _imageSet("egypt_hill", "jpg") }
+    { question: { sentence: "Select all squares that contain", word: "hills" }, imagesFunc: () => _imageSet("egypt_hill", "jpg") },
+    { question: { sentence: "Select all images that rhyme with", word: "orange" }, imagesFunc: () => _shuffleArray(_imageSet("orange", "jpg")) }
   ];
 
   const IMPLAUSIBLE_IMAGE_QUESTIONS = [
     { question: { sentence: "Select all squares that contain the colour", word: "white" }, imagesFunc: () => _shuffleArray(_imageSet("white", "jpg"), 0, 14) },
-    { question: { sentence: "Select all squares that contain", word: "animals" }, imagesFunc: () => _shuffleArray(_imageSet("animals", "jpg"), 0, 15) },
-    { question: { sentence: "Select all squares that contain", word: "vegetables" }, imagesFunc: () => _shuffleArray(_imageSet("vegetables", "jpg"), 0, 15) },
-    { question: { sentence: "Select all squares that contain", word: "vehicles" }, imagesFunc: () => _shuffleArray(_imageSet("vehicles", "jpg"), 0, 15) },
+    { question: { sentence: "Select all squares that contain", word: "animals" }, imagesFunc: () => _shuffleArray(_imageSet("animals", "jpg")) },
+    { question: { sentence: "Select all squares that contain", word: "vegetables" }, imagesFunc: () => _shuffleArray(_imageSet("vegetables", "jpg")) },
+    { question: { sentence: "Select all squares that contain", word: "vehicles" }, imagesFunc: () => _shuffleArray(_imageSet("vehicles", "jpg")) },
     { question: { sentence: "Select all squares that contain the colour", word: "red" }, imagesFunc: () => _imageSet("strawberries", "png") },
     { question: { sentence: "Select all squares that contain", word: "black dots" }, imagesFunc: () => _imageSet("grid_illusion", "png") },
-    { question: { sentence: "Select squares where the colour of the text has", word: "five letters" }, imagesFunc: _stroopEffect }
+    { question: { sentence: "Select squares where the <b>colour</b> of the text has", word: "five letters" }, imagesFunc: _stroopEffect }
   ];
 
   const PLAUSIBLE_AUDIO_QUESTIONS = [
@@ -41,8 +42,8 @@
     const minLength = Math.min(a1.length, a2.length);
     const a1Each = Math.floor(a1.length / minLength);
     const a2Each = Math.floor(a2.length / minLength);
-    const a1Extra = a1.length % minLength;
-    const a2Extra = a2.length % minLength;
+    let a1Extra = a1.length % minLength;
+    let a2Extra = a2.length % minLength;
     const joined = [];
     let a1Index = 0;
     let a2Index = 0;
@@ -72,7 +73,7 @@
   function _imageSet(filename, ext) {
     const imageSet = [];
     for (let i = 0; i < 16; i++) {
-      imageSet.push(`${IMAGES}${filename}/${filename}_${i}.${ext}`);
+      imageSet.push(`${IMAGES}${filename}/${i}.${ext}`);
     }
     return imageSet;
   }
@@ -88,7 +89,7 @@
     return AUDIO + filename;
   }
 
-  function _shuffleArray(array, start, end) {
+  function _shuffleArray(array, start = 0, end = array.length - 1) {
     // Taken from https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array.
     for (let i = end - start; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
