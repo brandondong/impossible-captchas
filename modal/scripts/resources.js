@@ -27,10 +27,11 @@ const IMPLAUSIBLE_AUDIO_QUESTIONS = [
   { source: _audioPath("vinny.mp3") },
   { source: _audioPath("laugh.mp3") },
   { source: _audioPath("bark.mp3") },
+  { source: _audioPath("fast.mp3") },
   { source: _audioPath("meatball_parade.mp3") }
 ];
 
-// Randomize before joining evenly.
+// TODO randomize before joining evenly.
 
 const IMAGE_QUESTIONS = joinEvenly(PLAUSIBLE_IMAGE_QUESTIONS, IMPLAUSIBLE_IMAGE_QUESTIONS);
 const AUDIO_QUESTIONS = joinEvenly(PLAUSIBLE_AUDIO_QUESTIONS, IMPLAUSIBLE_AUDIO_QUESTIONS);
