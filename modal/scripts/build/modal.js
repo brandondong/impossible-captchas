@@ -21,7 +21,8 @@
   ];
 
   const PLAUSIBLE_AUDIO_QUESTIONS = [
-    { source: _audioPath("pair_pear.mp3") }
+    { source: _audioPath("pair_pear.mp3") },
+    { source: _audioPath("wrap_rap.mp3") }
   ];
 
   const IMPLAUSIBLE_AUDIO_QUESTIONS = [
@@ -31,11 +32,15 @@
     { source: _audioPath("laugh.mp3") },
     { source: _audioPath("bark.mp3") },
     { source: _audioPath("fast.mp3") },
+    { source: _audioPath("smash_mouth.mp3") },
     { source: _audioPath("meatball_parade.mp3") }
   ];
 
   // Randomize before joining evenly.
-
+  _shuffleArray(PLAUSIBLE_IMAGE_QUESTIONS);
+  _shuffleArray(IMPLAUSIBLE_IMAGE_QUESTIONS);
+  _shuffleArray(PLAUSIBLE_AUDIO_QUESTIONS);
+  _shuffleArray(IMPLAUSIBLE_AUDIO_QUESTIONS);
   const IMAGE_QUESTIONS = joinEvenly(PLAUSIBLE_IMAGE_QUESTIONS, IMPLAUSIBLE_IMAGE_QUESTIONS);
   const AUDIO_QUESTIONS = joinEvenly(PLAUSIBLE_AUDIO_QUESTIONS, IMPLAUSIBLE_AUDIO_QUESTIONS);
 

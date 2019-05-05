@@ -2,7 +2,7 @@ export default class Modal {
   constructor() {
     const width = "428";
     const height = "600";
-    
+
     const md = document.createElement("div");
     md.style.display = "none";
     md.style.position = "fixed";
@@ -12,7 +12,7 @@ export default class Modal {
     md.style.width = "100%";
     md.style.height = "100%";
     md.style["background-color"] = "rgba(0,0,0,0.5)";
-    
+
     const mc = document.createElement("div");
     mc.style.position = "relative";
     mc.style.margin = "auto";
@@ -21,13 +21,13 @@ export default class Modal {
     mc.style["box-shadow"] = "0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19)"
     mc.style.top = "50%";
     mc.style["margin-top"] = `-${parseInt(height) / 2}px`;
-    
+
     const iframe = document.createElement("iframe");
-    iframe.src = "modal/index.html";
+    iframe.src = "https://brandondong.github.io/impossible-captchas/modal/index.html";
     iframe.width = width;
     iframe.height = height;
     iframe.style.border = "none";
-    
+
     const xButton = document.createElement("span");
     xButton.innerHTML = "&times;";
     xButton.style.position = "absolute";
@@ -40,7 +40,7 @@ export default class Modal {
     xButton.addEventListener("click", () => {
       md.style.display = "none";
     });
-    
+
     mc.appendChild(iframe);
     md.appendChild(xButton);
     md.appendChild(mc);
@@ -48,15 +48,15 @@ export default class Modal {
     this.md = md;
     this.mc = mc;
   }
-  
+
   open() {
     this.md.style.display = "block";
-    this.mc.animate([ 
-      { opacity: 0 }, 
+    this.mc.animate([
+      { opacity: 0 },
       { opacity: 1 }
     ], { ease: "ease", duration: 400 });
   }
-  
+
   close() {
     this.md.style.display = "none";
   }
