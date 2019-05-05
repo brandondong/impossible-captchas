@@ -154,6 +154,10 @@
       return this._isImageMode;
     }
 
+    numQuestionsAnswered() {
+      return this.numAudioQuestionsAnswered + this.numImageQuestionsAnswered;
+    }
+
     _hasImageQuestionsLeft() {
       return this.numImageQuestionsAnswered < IMAGE_QUESTIONS.length;
     }
@@ -220,7 +224,7 @@
         }
         // Update toggle link visibility.
         _updateToggleLink(manager, toggleLink);
-      }, 500);
+      }, _submitDelay(manager));
     });
     toggleLink.addEventListener("click", () => {
       manager.switchQuestionTypes();
@@ -390,6 +394,13 @@
     selection.collapseToEnd();
     const text = audioTextInput.innerHTML;
     submitButton.disabled = text.length === 0;
+  }
+
+  function _submitDelay(manager) {
+    if (manager.numQuestionsAnswered() > 5 && Math.random() <= 0.1) {
+      return 2000;
+    }
+    return 1000;
   }
 
   document.addEventListener("DOMContentLoaded", main);

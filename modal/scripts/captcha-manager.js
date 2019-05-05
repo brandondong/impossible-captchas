@@ -48,6 +48,10 @@ export default class CaptchaManager {
     return this._isImageMode;
   }
 
+  numQuestionsAnswered() {
+    return this.numAudioQuestionsAnswered + this.numImageQuestionsAnswered;
+  }
+
   _hasImageQuestionsLeft() {
     return this.numImageQuestionsAnswered < IMAGE_QUESTIONS.length;
   }
