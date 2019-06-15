@@ -14,6 +14,7 @@ const IMPLAUSIBLE_IMAGE_QUESTIONS = [
   { question: { sentence: "Select all squares that contain", word: "vehicles" }, imagesFunc: () => _shuffleArray(_imageSet("vehicles", "jpg")) },
   { question: { sentence: "Select all squares that contain the colour", word: "red" }, imagesFunc: () => _imageSet("strawberries", "png") },
   { question: { sentence: "Select all squares that contain", word: "black dots" }, imagesFunc: () => _imageSet("grid_illusion", "png") },
+  { question: { sentence: "Select all squares that contain the colour", word: "beige" }, imagesFunc: () => _imageSet("beige_balls", "jpg") },
   { question: { sentence: "Select squares where the <b>colour</b> of the text has", word: "five letters" }, imagesFunc: _stroopEffect }
 ];
 
